@@ -18,7 +18,10 @@ const urlParams = new URLSearchParams(window.location.search);
 const seed = urlParams.get("seed");
 const randomSeed = parseInt(seed);
 if (!randomSeed) {
-  window.location.search = `?seed=${(Math.random() * 2 ** 32) >>> 0}`;
+  const seed = (Math.random() * 2 ** 32) >>> 0;
+  window.location.search = window.location.search
+    ? `${window.location.search}&seed=${seed}`
+    : `?seed=${seed}`;
 }
 const random = splitmix32(randomSeed);
 
