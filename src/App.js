@@ -192,7 +192,7 @@ const Grid = () => {
           />
         ))}
       </div>
-      <h1>Answer</h1>
+      Answer
       <div
         className="grid"
         style={{
@@ -218,7 +218,6 @@ const App = () => {
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
       <div className="app">
-        <h1>N Tiles</h1>
         <Grid /> {/* Change m and n as needed */}
       </div>
     </DndProvider>
