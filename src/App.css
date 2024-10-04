@@ -2,14 +2,14 @@ body,
 html {
   margin: 0;
   padding: 0;
-  height: 200%;
+  height: 100%;
   width: 100%;
   box-sizing: border-box;
 }
 
 .app {
   text-align: center;
-  overflow: hidden;
+  /*overflow: hidden;*/
   /* Prevent overflow */
   height: 100vh;
   /* Full viewport height */
