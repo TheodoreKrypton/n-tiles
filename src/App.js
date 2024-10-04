@@ -1,33 +1,57 @@
-import React, { useCallback, useState } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import './App.css';
+import React, { useCallback, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { TouchBackend } from "react-dnd-touch-backend";
+import "./App.css";
 
 const splitmix32 = (a) => () => {
   a |= 0;
-  a = a + 0x9e3779b9 | 0;
+  a = (a + 0x9e3779b9) | 0;
   let t = a ^ (a >>> 16);
   t = Math.imul(t, 0x21f0aaad);
   t = t ^ (t >>> 15);
   t = Math.imul(t, 0x735a2d97);
   return ((t = t ^ (t >>> 15)) >>> 0) / 4294967296;
-}
+};
 
 // if the url paramter has a seed, use that seed
 const urlParams = new URLSearchParams(window.location.search);
-const seed = urlParams.get('seed');
+const seed = urlParams.get("seed");
 const randomSeed = parseInt(seed);
 if (!randomSeed) {
-  window.location.search = `?seed=${Math.random() * 2**32 >>> 0}`;
+  window.location.search = `?seed=${(Math.random() * 2 ** 32) >>> 0}`;
 }
 const random = splitmix32(randomSeed);
 
+const m = urlParams.get("m") || 3;
+const n = urlParams.get("n") || 3;
+
+const randomIcon = (front) => {
+  if (!front) {
+    front = Math.floor(random() * 2 * m * n) + 1;
+  }
+  while (true) {
+    const back = Math.floor(random() * 2 * m * n) + 1;
+    if (front !== back) {
+      return [front, back];
+    }
+  }
+};
+
 const ItemTypes = {
-  SQUARE: 'square',
+  SQUARE: "square",
 };
 
 // Square component
-const Square = ({ frontValue, backValue, onClick, index, moveSquare, flipped, disableAnimation, clickable }) => {
+const Square = ({
+  frontValue,
+  backValue,
+  onClick,
+  index,
+  moveSquare,
+  flipped,
+  disableAnimation,
+  clickable,
+}) => {
   const [{ isDraggingTile }, drag] = useDrag({
     type: ItemTypes.SQUARE,
     item: { index },
@@ -46,76 +70,75 @@ const Square = ({ frontValue, backValue, onClick, index, moveSquare, flipped, di
   });
 
   if (clickable) {
-  return (
-    <div
-      ref={(node) => drag(drop(node))}
-      className={`square ${flipped ? 'flipped' : ''} ${disableAnimation ? 'no-animation' : ''}`}
-      style={{
-        opacity: isDraggingTile ? 0.5 : 1,
-        cursor: 'move',
-        backgroundImage: flipped ? `url(${process.env.PUBLIC_URL}/tiles/${backValue}.png)` : `url(${process.env.PUBLIC_URL}/tiles/${frontValue}.png)`,
-        backgroundSize: 'cover',
-        // generate a color based on the tile value
-        backgroundColor: flipped ? `hsl(${(backValue * 50) % 360}, 70%, 80%)` : `hsl(${(frontValue * 50) % 360}, 70%, 80%)`
-      }}
-      onClick={() => onClick(index)}
-    />
-  );
+    return (
+      <div
+        ref={(node) => drag(drop(node))}
+        className={`square ${flipped ? "flipped" : ""} ${
+          disableAnimation ? "no-animation" : ""
+        }`}
+        style={{
+          opacity: isDraggingTile ? 0.5 : 1,
+          cursor: "move",
+          backgroundImage: flipped
+            ? `url(${process.env.PUBLIC_URL}/tiles/${backValue}.png)`
+            : `url(${process.env.PUBLIC_URL}/tiles/${frontValue}.png)`,
+          backgroundSize: "cover",
+          // generate a color based on the tile value
+          backgroundColor: flipped
+            ? `hsl(${(backValue * 50) % 360}, 70%, 80%)`
+            : `hsl(${(frontValue * 50) % 360}, 70%, 80%)`,
+        }}
+        onClick={() => onClick(index)}
+      />
+    );
   } else {
     return (
       <div
-        className={`square ${flipped ? 'flipped' : ''} ${disableAnimation ? 'no-animation' : ''}`}
+        className={`square ${flipped ? "flipped" : ""} ${
+          disableAnimation ? "no-animation" : ""
+        }`}
         style={{
-          backgroundImage: flipped ? `url(${process.env.PUBLIC_URL}/tiles/${backValue}.png)` : `url(${process.env.PUBLIC_URL}/tiles/${frontValue}.png)`,
-          backgroundSize: 'cover',
+          backgroundImage: flipped
+            ? `url(${process.env.PUBLIC_URL}/tiles/${backValue}.png)`
+            : `url(${process.env.PUBLIC_URL}/tiles/${frontValue}.png)`,
+          backgroundSize: "cover",
           // generate a color based on the tile value
-          backgroundColor: flipped ? `hsl(${(backValue * 50) % 360}, 70%, 80%)` : `hsl(${(frontValue * 50) % 360}, 70%, 80%)`
+          backgroundColor: flipped
+            ? `hsl(${(backValue * 50) % 360}, 70%, 80%)`
+            : `hsl(${(frontValue * 50) % 360}, 70%, 80%)`,
         }}
       />
     );
   }
-
 };
 
 // Grid component
-const Grid = ({ m, n }) => {
-  const randomIcon = React.useCallback((front) => {
-    if (!front) {
-      front = Math.floor(random() * 2 * m * n) + 1;
-    }
-    while (true) {
-      const back = Math.floor(random() * 2 * m * n) + 1;
-      if (front !== back) {
-        return [front, back];
-    }
-  }
-  }, [m, n]);
-
+const Grid = () => {
   const answer = React.useMemo(() => {
     // generate m * n random numbers under 2 * m * n
-    return Array.from({length: m*n}).map(() => randomIcon()[0]);
-  }, [m, n, randomIcon]);
+    return Array.from({ length: m * n }).map(() => randomIcon()[0]);
+  }, []);
 
   const answerGrid = React.useMemo(() => {
-    return answer.map((value, index) => ( {
-        frontValue: value,
-        backValue: 0,
-        flipped: false,
-        disableAnimation: false,
-      }));
-    }, [answer])
+    return answer.map((value, index) => ({
+      frontValue: value,
+      backValue: 0,
+      flipped: false,
+      disableAnimation: false,
+    }));
+  }, [answer]);
 
   const [grid, setGrid] = useState(() => {
     // shuffle the answer
     const shuffled = [...answer].sort(() => random() - 0.5);
     // create a grid of m * n tiles
     return shuffled.map((value, index) => ({
-      frontValue: value,    // Front face value
-      backValue: randomIcon(value)[1],   // Back face value
+      frontValue: value, // Front face value
+      backValue: randomIcon(value)[1], // Back face value
       flipped: random() * 2 < 1,
-      disableAnimation: false,  // Track if flip animation should be disabled
+      disableAnimation: false, // Track if flip animation should be disabled
     }));
-  }, [answer, randomIcon]);
+  }, [answer]);
 
   // Move tiles and preserve their flipped state
   const moveSquare = useCallback(
@@ -149,45 +172,44 @@ const Grid = ({ m, n }) => {
   return (
     <>
       <div
-      className="grid"
-      style={{
-        gridTemplateColumns: `repeat(${n}, 1fr)`,
-        gridTemplateRows: `repeat(${m}, 1fr)`,
-      }}
-    >
-      {grid.map((tile, index) => (
-        <Square
-          key={index}
-          index={index}
-          frontValue={tile.frontValue}
-          backValue={tile.backValue}
-          moveSquare={moveSquare}
-          flipped={tile.flipped}
-          disableAnimation={tile.disableAnimation}
-          onClick={handleClick}
-          clickable
-        />
-      ))}
-    </div>
-    <h1>Answer</h1>
-    <div
-      className="grid"
-      style={{
-        gridTemplateColumns: `repeat(${n}, 1fr)`,
-        gridTemplateRows: `repeat(${m}, 1fr)`,
-      }}
-    >
-      {answerGrid.map((tile, index) => (
-        <Square
-          key={index}
-          index={index}
-          frontValue={tile.frontValue}
-          disableAnimation={true}
-        />
-      ))}
-    </div>
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${n}, 1fr)`,
+          gridTemplateRows: `repeat(${m}, 1fr)`,
+        }}
+      >
+        {grid.map((tile, index) => (
+          <Square
+            key={index}
+            index={index}
+            frontValue={tile.frontValue}
+            backValue={tile.backValue}
+            moveSquare={moveSquare}
+            flipped={tile.flipped}
+            disableAnimation={tile.disableAnimation}
+            onClick={handleClick}
+            clickable
+          />
+        ))}
+      </div>
+      <h1>Answer</h1>
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${n}, 1fr)`,
+          gridTemplateRows: `repeat(${m}, 1fr)`,
+        }}
+      >
+        {answerGrid.map((tile, index) => (
+          <Square
+            key={index}
+            index={index}
+            frontValue={tile.frontValue}
+            disableAnimation={true}
+          />
+        ))}
+      </div>
     </>
-    
   );
 };
 
@@ -197,7 +219,7 @@ const App = () => {
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
       <div className="app">
         <h1>N Tiles</h1>
-        <Grid m={3} n={3} /> {/* Change m and n as needed */}
+        <Grid /> {/* Change m and n as needed */}
       </div>
     </DndProvider>
   );
