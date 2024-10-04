@@ -1,35 +1,60 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .app {
   text-align: center;
+  overflow: hidden;
+  /* Prevent overflow */
+  height: 100vh;
+  /* Full viewport height */
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  /* Adjust based on 'n' */
-  grid-template-rows: repeat(4, 100px);
-  /* Adjust based on 'm' */
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
+  gap: 5px;
+  /* Maximum spacing between squares */
+  width: 100%;
+  /* Full width */
+  max-width: calc(100px * 3 + 10px);
+  /* 3 tiles of 100px plus 5px gaps */
+  max-height: calc(100px * 3 + 10px);
+  /* 3 tiles of 100px plus 5px gaps */
+  margin: 0 auto;
+  /* Center the grid */
+  grid-template-columns: repeat(3, 1fr);
+  /* Fixed columns for 3 */
+  grid-template-rows: repeat(3, 1fr);
+  /* Fixed rows for 3 */
 }
 
 .square {
-  width: 100px;
-  height: 100px;
-  background-color: lightblue;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 5vw;
+  /* Scale font size with viewport */
   font-weight: bold;
   user-select: none;
   transition: background-color 0.3s, transform 0.3s;
   cursor: pointer;
+  max-width: 100px;
+  /* Max width of the tile */
+  max-height: 100px;
+  /* Max height of the tile */
+  width: 100%;
+  /* Occupy full space within grid cell */
+  aspect-ratio: 1;
+  /* Maintain a square aspect ratio */
 }
 
 .square.flipped {
-  background-color: lightcoral;
-  transform: rotateY(180deg);
+  /* transform: rotateY(180deg); */
   /* Flip effect */
 }
 
@@ -38,7 +63,24 @@
   /* Disable transition while dragging */
 }
 
-.square.dragging {
-  transform: none;
-  /* Ensure no flipping happens during drag */
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .square {
+    font-size: 8vw;
+    /* Increase font size for smaller screens */
+  }
+
+  .grid {
+    max-width: calc(100px * 3 + 10px);
+    /* Adjust max width for mobile */
+    max-height: calc(100px * 3 + 10px);
+    /* Adjust max height for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .square {
+    font-size: 10vw;
+    /* Further increase font size for very small screens */
+  }
 }
