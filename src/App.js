@@ -174,6 +174,24 @@ const Grid = () => {
 
   return (
     <>
+      Answer
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${n}, 1fr)`,
+          gridTemplateRows: `repeat(${m}, 1fr)`,
+        }}
+      >
+        {answerGrid.map((tile, index) => (
+          <Square
+            key={index}
+            index={index}
+            frontValue={tile.frontValue}
+            disableAnimation={true}
+          />
+        ))}
+      </div>
+      <br />
       <div
         className="grid"
         style={{
@@ -192,23 +210,6 @@ const Grid = () => {
             disableAnimation={tile.disableAnimation}
             onClick={handleClick}
             clickable
-          />
-        ))}
-      </div>
-      Answer
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${n}, 1fr)`,
-          gridTemplateRows: `repeat(${m}, 1fr)`,
-        }}
-      >
-        {answerGrid.map((tile, index) => (
-          <Square
-            key={index}
-            index={index}
-            frontValue={tile.frontValue}
-            disableAnimation={true}
           />
         ))}
       </div>
