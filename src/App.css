@@ -21,16 +21,12 @@ html {
   /* Maximum spacing between squares */
   width: 100%;
   /* Full width */
-  max-width: calc(100px * 3 + 10px);
+  max-width: 300px;
   /* 3 tiles of 100px plus 5px gaps */
-  max-height: calc(100px * 3 + 10px);
+  max-height: 300px;
   /* 3 tiles of 100px plus 5px gaps */
   margin: 0 auto;
   /* Center the grid */
-  grid-template-columns: repeat(3, 1fr);
-  /* Fixed columns for 3 */
-  grid-template-rows: repeat(3, 1fr);
-  /* Fixed rows for 3 */
 }
 
 .square {
@@ -51,16 +47,6 @@ html {
   /* Occupy full space within grid cell */
   aspect-ratio: 1;
   /* Maintain a square aspect ratio */
-}
-
-.square.flipped {
-  /* transform: rotateY(180deg); */
-  /* Flip effect */
-}
-
-.square.no-animation {
-  transition: none;
-  /* Disable transition while dragging */
 }
 
 /* Media query for smaller screens */
