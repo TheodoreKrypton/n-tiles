@@ -99,21 +99,21 @@ const Grid = ({ answer, m, n }) => {
 // Main App component
 const App = () => {
   const [states, setStates] = useState({});
+  const m = Math.min(states.m, 4);
+  const n = Math.min(states.n, 4);
 
   const answer = useMemo(() => {
     // generate m * n random numbers under 2 * m * n
-    return Array.from({ length: states.m * states.n }).map(() =>
-      randomIcon(2 * states.m * states.n)
-    );
+    return Array.from({ length: m * n }).map(() => randomIcon(2 * m * n));
   }, [states]);
 
   return (
     <div className="app">
       <Controls states={states} setStates={setStates} />
-      <AnswerGrid answer={answer} m={states.m} n={states.n} />
+      <AnswerGrid answer={answer} m={m} n={n} />
       <br />
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-        <Grid answer={answer} m={states.m} n={states.n} />
+        <Grid answer={answer} m={m} n={n} />
       </DndProvider>
     </div>
   );

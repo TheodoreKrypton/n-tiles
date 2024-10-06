@@ -24,24 +24,38 @@ const Controls = ({ states, setStates }) => {
           type="number"
           value={states.m}
           onChange={(e) => setStates({ ...states, m: e.target.value })}
+          size="sm"
         />
       </label>
+      <br />
       <label>
         Columns:
         <input
           type="number"
           value={states.n}
           onChange={(e) => setStates({ ...states, n: e.target.value })}
+          size="sm"
         />
       </label>
+      <br />
       <label>
         Seed:
         <input
           type="number"
           value={states.seed}
           onChange={(e) => setStates({ ...states, seed: e.target.value })}
+          size="sm"
         />
       </label>
+      <br />
+      <button
+        onClick={() => {
+          const seed = (Math.random() * 2 ** 32) >>> 0;
+          setStates({ ...states, seed });
+        }}
+      >
+        New Game
+      </button>
       <button
         onClick={() => {
           const url = `${window.location.origin}${window.location.pathname}`;
