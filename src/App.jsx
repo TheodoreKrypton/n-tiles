@@ -99,8 +99,8 @@ const Grid = ({ answer, m, n }) => {
 // Main App component
 const App = () => {
   const [states, setStates] = useState({});
-  const m = useMemo(() => Math.min(states.m, 4), [states.m]);
-  const n = useMemo(() => Math.min(states.n, 4), [states.n]);
+  const m = useMemo(() => Math.min(states.m, 5), [states.m]);
+  const n = useMemo(() => Math.min(states.n, 5), [states.n]);
 
   const answer = useMemo(() => {
     utils.random.setSeed(states.seed);
