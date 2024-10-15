@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import utils from "../utils";
 
 const Controls = ({ states, setStates }) => {
+  console.log(JSON.stringify(states));
   useEffect(() => {
     const { m, n, seed } = states;
     if (m === undefined || n === undefined || seed === undefined) {

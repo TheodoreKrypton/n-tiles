@@ -99,13 +99,14 @@ const Grid = ({ answer, m, n }) => {
 // Main App component
 const App = () => {
   const [states, setStates] = useState({});
-  const m = Math.min(states.m, 4);
-  const n = Math.min(states.n, 4);
+  const m = useMemo(() => Math.min(states.m, 4), [states.m]);
+  const n = useMemo(() => Math.min(states.n, 4), [states.n]);
 
   const answer = useMemo(() => {
+    utils.random.setSeed(states.seed);
     // generate m * n random numbers under 2 * m * n
     return Array.from({ length: m * n }).map(() => randomIcon(2 * m * n));
-  }, [states]);
+  }, [m, n, states.seed]);
 
   return (
     <div className="app">
